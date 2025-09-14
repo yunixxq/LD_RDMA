@@ -39,6 +39,7 @@ num_link = 0
 filename = "fat_k{}_{}G_OS{}.txt".format(k_fat, link_rate, oversubscript)
 with open(filename, "w") as f:
 
+    # Server → ToR（最底层）
     for p in range(n_tor_total):
         for i in range(n_server_per_tor):
             id_server = p * n_server_per_tor + i
@@ -47,6 +48,7 @@ with open(filename, "w") as f:
             f.write("{} {} {}Gbps {}ns 0.000000\n".format(id_server, id_tor, link_rate, link_latency))
             num_link += 1
 
+    # ToR → Agg（Pod 内二层）
     for i in range(n_pod):
         for j in range(n_tor_per_pod):
             for l in range(n_agg_per_pod):
@@ -57,6 +59,7 @@ with open(filename, "w") as f:
                 num_link += 1
 
 
+    # Agg → Core（跨 Pod 三层）
     n_jump = int(k_fat / 2)
     for i in range(n_pod):
         for j in range(n_agg_per_pod):
